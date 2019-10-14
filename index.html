@@ -10,10 +10,10 @@
 </head>
 
 <body>
-    <h1>Pandas for Everyone 🐼</h1>
+    <h1>pandas for everyone. 🐼</h1>
     
     <div id="totalBar" class="w3-light-grey" style="height:25px">
-        <div id="myBar" class="w3-container w3-blue" style="width:0%; height:25px"></div>
+        <div id="myBar" class="w3-container w3-light-blue" style="width:0%; height:25px"></div>
     </div>
     <div id="app">
         <md-progress-bar md-mode="determinate" :md-value="amount"></md-progress-bar>
@@ -87,24 +87,44 @@
             `<div class="md-layout  md-gutter">
             
             <div id="cardGroupCreator" class="md-layout-item md-size-50">
-                    
-                <md-card>
-                    <h1> Original Dataframe </h1>
-                    <img src="https://www.w3resource.com/w3r_images/pandas-data-structure.svg" alt="Smiley face" height="555" width="555">
-                </md-card>
+                <md-table v-model="layoutItems[2].data" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+                  <md-table-toolbar>
+                        <h3>{{layoutItems[2].header}}</h3>
+                  </md-table-toolbar>
+            
+                  <md-table-row slot="md-table-row" slot-scope="{ item }">
+                    <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
+                    <md-table-cell md-label="NAME" md-sort-by="name">{{ item.name }}</md-table-cell>
+                    <md-table-cell md-label="GENDER" md-sort-by="gender">{{ item.gender }}</md-table-cell>
+                    <md-table-cell md-label="AGE" md-sort-by="age">{{ item.age }}</md-table-cell>
+                    <md-table-cell md-label="CHILDREN" md-sort-by="children">{{ item.children }}</md-table-cell>
+                    <md-table-cell md-label="RESIDENCE" md-sort-by="residence">{{ item.residence }}</md-table-cell>
+                  </md-table-row>
+                </md-table>
                 
                 <md-card>
-                    <h1> Original Dataframe </h1>
-                    <img src="https://www.w3resource.com/w3r_images/pandas-data-structure.svg" alt="Smiley face" height="555" width="555">
                 </md-card>
+                
+                <md-table v-model="layoutItems[3].data" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+                  <md-table-toolbar>
+                        <h3>{{layoutItems[3].header}}</h3>
+                  </md-table-toolbar>
+            
+                  <md-table-row slot="md-table-row" slot-scope="{ item }">
+                    <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
+                    <md-table-cell md-label="NAME" md-sort-by="name">{{ item.name }}</md-table-cell>
+                    <md-table-cell md-label="GENDER" md-sort-by="gender">{{ item.gender }}</md-table-cell>
+                    <md-table-cell md-label="AGE" md-sort-by="age">{{ item.age }}</md-table-cell>
+                    <md-table-cell md-label="CHILDREN" md-sort-by="children">{{ item.children }}</md-table-cell>
+                    <md-table-cell md-label="RESIDENCE" md-sort-by="residence">{{ item.residence }}</md-table-cell>
+                  </md-table-row>
+                </md-table>
                 
                 
             </div>
             
             
             <div id="cardGroupPreview" class="md-layout-item md-size-50">
-                
-                <md-progress-bar md-mode="determinate" :md-value="amount"></md-progress-bar>
                 <md-card> <!-- Examples -->
                     <md-card-header>
                         <md-card-header-text>
@@ -173,9 +193,20 @@
                 questions: [
                     {
                         name: "question 1", layoutItems: [
-                            { header: "Examples", subHeader: 'Objective: Learn how to filter dataframe by column value', vModel: "## Filter for female students only \n>>> original_df[original_df['GENDER']=='FEMALE'] \n \n## Filter for Engineering students only \n>>> original_df[original_df['MAJOR']=='ENGINEERING'] \n " },
+                            { header: "Examples", subHeader: 'Objective: Learn how to filter dataframe by column value', vModel: "## Filter for female pandas only \n>>> original_df[original_df['GENDER']=='F'] \n \n## Filter for pandas living in the USA \n>>> original_df[original_df['RESIDENCE']=='USA'] \n " },
                             { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "def ifFunc(a,b):\n if a == True:  \n  return b\n" },
-                            { header: "Introduction", subHeader: '', vModel: "When checking if a condition is True, prefer relying on the implicit “truthiness” of the object in the conditional statement using \nif object:\nthan\nif object == True:" }
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"}]},
+                            { header: "Expected Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"}
+                            ]}
                         ], status: " 🔴"
                     },
                     {
@@ -265,11 +296,12 @@
 
 <style lang="scss" scoped>
     .md-card {
-        width: 100%;
+        width: 95%;
         margin: 0px;
         display: inline-block;
         vertical-align: top;
-        min-height: 200px
+        min-height: 50px;
+        max-height: 400px
     }
     .md-card-content {
         padding-bottom: 16px !important;
@@ -312,7 +344,14 @@
         mix-blend-mode: darken
     }
     h1 {
-        padding: 20px;
+        background: #EDBC00;
+        color: #111;
+        font-family: 'Helvetica Neue', sans-serif; 
+        font-size: 40px; 
+        padding: 12px;
+        font-weight: bold; 
+        letter-spacing: -1px; 
+        line-height: 1;
         margin: auto;
         text-align: center
     }
