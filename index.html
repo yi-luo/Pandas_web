@@ -17,13 +17,12 @@
     </div>
     <div id="app">
         <md-progress-bar md-mode="determinate" :md-value="amount"></md-progress-bar>
-        <md-tabs>
-            <md-tab v-for="question in questions" :key=question.name
-                v-bind:md-label=question.name+question.status>
+        <md-steppers>
+            <md-step v-for="question in questions" :key=question.name>
                 <doctest-activity v-bind:layout-things=question.layoutItems
                     v-bind:question-name=question.name @questionhandler="toggleQuestionStatus" />
-            </md-tab>
-        </md-tabs>
+            </md-step>
+        </md-steppers>
     </div>
     </div>
 </body>
@@ -205,71 +204,79 @@
                                                                     {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"}]},
                             { header: "Expected Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
                                                                     {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
-                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"}
-                            ]}
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"}]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 2", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> forLoop([1,2,3])\n6 \n>>> forLoop([1,2,3,4,5])\n15 \n>>> byteCodeChecker(forLoop, 'OPNAME', 'FOR_ITER')\n'found FOR_ITER'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def forLoop(listOfNumbers):\n total = 0 \n index = 0 \n while index < len(listOfNumbers):\n  total += listOfNumbers[index]\n  index += 1\n return total" },
-                            { header: "Introduction", subHeader: '', vModel: "Use a for-in loop to iterate through elements of an iterable like a list/dictionary than creating an index and incrementing that index after every loop." }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 3", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> useEnumerate(['bunnyA','bunnyB'])\n'bunnyA is at index 0 bunnyB is at index 1 ' \n>>> useEnumerate(['crabbyA','crabbyB'])\n'crabbyA is at index 0 crabbyB is at index 1 ' \n>>> codeInfoChecker(useEnumerate, 'enumerate')\n'found enumerate'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def useEnumerate(list):\n locationOfItems = '' \n for index in range(len(list)): \n  value = list[index]\n  locationOfItems += f'{value} is at index {index} '\n return locationOfItems" },
-                            { header: "Introduction", subHeader: '', vModel: "We can use the enumerate function to obtain the index that the loop is in. The range(len()) solution below works but it is more pythonic to use enumerate" }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 4", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> useZip(['pikachu','bulbasaur'],['lightning type','grass type'])\n'pikachu is lightning type bulbasaur is grass type ' \n>>> useZip(['Barney','Pooh'],['T-rex','teddy bear'])\n'Barney is T-rex Pooh is teddy bear ' \n>>> codeInfoChecker(useZip, 'zip')\n'found zip'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def useZip(list1, list2):\n resultString = ''\n for index, value in enumerate(list1):\n  resultString += f'{value} is {list2[index]} '\n return resultString" },
-                            { header: "Introduction", subHeader: '', vModel: "The zip function pairs the first elements of each iterator together then pairs the second elements together and so on. If the iterables in the zip function are not the same length, then the smallest length iterable decides the length of the generated output." }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 5", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Introduction", subHeader: '', vModel: "Using something called generators, we can handle large amounts of data or computation easily.\n\nThis is because how ever large the amount of data, generators represent it as a stream of data and provide one data value at a time out of the data stream. This means we can run intensive computation without crashing our computer since it works with just one value at a time.\n\nA generator function consists of one or more yield statements. Calling the generator function creates an iterable, and iterating it runs the code in the function. Each yield statement executed produces another value in the stream." }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 6", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Introduction", subHeader: '', vModel: "Using something called generators, we can handle large amounts of data or computation easily.\n\nThis is because how ever large the amount of data, generators represent it as a stream of data and provide one data value at a time out of the data stream. This means we can run intensive computation without crashing our computer since it works with just one value at a time.\n\nA generator function consists of one or more yield statements. Calling the generator function creates an iterable, and iterating it runs the code in the function. Each yield statement executed produces another value in the stream." }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 7", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Introduction", subHeader: '', vModel: "Using something called generators, we can handle large amounts of data or computation easily.\n\nThis is because how ever large the amount of data, generators represent it as a stream of data and provide one data value at a time out of the data stream. This means we can run intensive computation without crashing our computer since it works with just one value at a time.\n\nA generator function consists of one or more yield statements. Calling the generator function creates an iterable, and iterating it runs the code in the function. Each yield statement executed produces another value in the stream." }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 8", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Introduction", subHeader: '', vModel: "Using something called generators, we can handle large amounts of data or computation easily.\n\nThis is because how ever large the amount of data, generators represent it as a stream of data and provide one data value at a time out of the data stream. This means we can run intensive computation without crashing our computer since it works with just one value at a time.\n\nA generator function consists of one or more yield statements. Calling the generator function creates an iterable, and iterating it runs the code in the function. Each yield statement executed produces another value in the stream." }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 9", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Introduction", subHeader: '', vModel: "Using something called generators, we can handle large amounts of data or computation easily.\n\nThis is because how ever large the amount of data, generators represent it as a stream of data and provide one data value at a time out of the data stream. This means we can run intensive computation without crashing our computer since it works with just one value at a time.\n\nA generator function consists of one or more yield statements. Calling the generator function creates an iterable, and iterating it runs the code in the function. Each yield statement executed produces another value in the stream." }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 10", layoutItems: [
                             { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
                             { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Introduction", subHeader: '', vModel: "Using something called generators, we can handle large amounts of data or computation easily.\n\nThis is because how ever large the amount of data, generators represent it as a stream of data and provide one data value at a time out of the data stream. This means we can run intensive computation without crashing our computer since it works with just one value at a time.\n\nA generator function consists of one or more yield statements. Calling the generator function creates an iterable, and iterating it runs the code in the function. Each yield statement executed produces another value in the stream." }
+                            { header: "Original Dataframe", data:[]},
+                            { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                 ]
