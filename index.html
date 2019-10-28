@@ -11,12 +11,7 @@
 
 <body>
     <h1>pandas for everyone. 🐼</h1>
-    
-    <div id="totalBar" class="w3-light-grey" style="height:25px">
-        <div id="myBar" class="w3-container w3-light-blue" style="width:0%; height:25px"></div>
-    </div>
     <div id="app">
-        <md-progress-bar md-mode="determinate" :md-value="amount"></md-progress-bar>
         <md-steppers>
             <md-step v-for="question in questions" :key=question.name>
                 <doctest-activity v-bind:layout-things=question.layoutItems
@@ -43,6 +38,10 @@
                 answer: "",
                 layoutItems: this.layoutThings,
                 title: this.questionName,
+                num_try: 0,
+                html_result:"",
+                json_result:"",
+                text_result:"",
                 cmOptions: {
                     mode: 'python',
                     lineNumbers: true
@@ -57,15 +56,8 @@
         methods: {
             postContents: function () {
                 // only when submit question successfully
-                var totalElem = document.getElementById("totalBar");
-                var elem = document.getElementById("myBar");
-                var totalPos = totalElem.getBoundingClientRect();
-                var progressPos = elem.getBoundingClientRect();
-                var totalWidth = totalPos.width;
-                var progressWidth = progressPos.width;
-                progressWidth = progressWidth + (totalWidth/10);
-                elem.style.width = progressWidth; 
-                this.amount = this.amount + 10;
+                this.amount = this.amount +10;
+                this.num_try = this.num_try + 1;
                 // comment: leaving the gatewayUrl empty - API will post back to itself
                 const gatewayUrl = '';
                 fetch(gatewayUrl, {
@@ -79,6 +71,17 @@
                     return response.json()
                 }).then(data => {
                     this.answer = JSON.parse(JSON.stringify(data))
+                    if (this.num_try < 3){
+                        this.html_result = this.answer.htmlFeedback
+                        this.json_result = this.answer.jsonFeedback
+                        this.text_result = this.answer.textFeedback
+                    }
+                    else{
+                        this.num_try = 0;
+                        this.html_result = "html_answer"
+                        this.json_result = "json asnwer"
+                        this.text_result = "text answer"
+                    }
                     return this.$emit('questionhandler', { data, questionName: this.questionName })
                 })
             }
@@ -86,6 +89,8 @@
         template:
         `
         <div>
+        <md-progress-bar md-mode="determinate" :md-value="amount"></md-progress-bar>
+        <input type="range" v-model.number="amount"> {{ amount }}%
         <h2 class="title-name">{{title}}</h2> 
             <div class="md-layout  md-gutter">
                 <div id="cardGroupCreator" class="md-layout-item md-size-50">
@@ -170,12 +175,12 @@
                             <md-field>
                                 <md-tabs>
                                     <md-tab id="tab-htmlResults" md-label="HTML results">
-                                        <div v-html="answer.htmlFeedback"></div>
+                                        <div v-html="answer.htmlFeedback" readonly></div>
                                     </md-tab>
-                                    <md-tab id="tab-jsonResults" md-label="JSON results">
-                                        <md-textarea v-model="answer.jsonFeedback" readonly></md-textarea>
+                                    <md-tab id="tab-pythonResults" md-label="Python results">
+                                        <md-textarea v-model="answer.pythonFeedback" readonly></md-textarea>
                                     </md-tab>
-                                    <md-tab id="tab-textResults" md-label="Text results">
+                                    <md-tab id="tab-textResults" md-label="Solution">
                                         <md-textarea v-model="answer.textFeedback" readonly></md-textarea>
                                     </md-tab>
                                 </md-tabs>
@@ -195,8 +200,96 @@
                 amount: 100,
                 questions: [
                     {
+                        name: "Selecting Rows", layoutItems: [
+                            { header: "Examples", subHeader: 'Objective: Learn how to select rows in dataframe', vModel: "## Select the 5th row \n>>> original_df.iloc[4]\nNOTE: Python starts from index 0 \n\n## Select the first 3 rows \n>>>original_df.iloc[0:3]\nNOTE: 0:3 => [0,1,2]\n "},
+                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Select the 2nd, 5th, and 10th row \n\n" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
+                            { header: "Expected Dataframe", data:[{id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]}
+                        ], status: " 🔴"
+                    },
+                    {
+                        name: "Selecting Columns", layoutItems: [
+                            { header: "Examples", subHeader: 'Objective: Learn how to select columns in dataframe', vModel: "## Select the 4th column \n>>> original_df.iloc[:,3] \n \n## Select the 'AGE' column \n>>> original_df['AGE'] \nOR original_df.loc[:,'AGE']\n "},
+                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Select the 'ID','NAME' and 'RESIDENCE' columns\n## HINT: [column1,column2,..]\n\n "},
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
+                            { header: "Expected Dataframe", data:[{id: "1",name: "Mei Xiang",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",residence:"USA"}]}
+                        ], status: " 🔴"
+                    },
+                    {
+                        name: "Selecting Specific Cells", layoutItems: [
+                            { header: "Examples", subHeader: 'Objective: Learn how to select specific cells in dataframe', vModel: "## Select the cell in the 3rd row and 4th column \n>>> original_df.iloc[2][3]\nOR original_df.iloc[2,3]\n \n## Select the cell in the 5th row and 'RESIDENCE' column \n>>> original_df.iloc[4]['RESIDENCE']\n " },
+                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Select the cell where 'ID'=9 and column='NAME'\n\n" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
+                            { header: "Expected Dataframe", data:[{id: "9",name: "Gu Gu"}]}
+                        ], status: " 🔴"
+                    },
+                    {
+                        name: "Renaming Column Names", layoutItems: [
+                            { header: "Examples", subHeader: 'Objective: Learn how to rename column names', vModel: "## Rename column name 'CHILDREN' to 'CUBS?'\n >>> original_df.rename(columns = {'CHILDREN':'CUBS?'}) \n "},
+                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Rename column names 'GENDER' to 'SEX' and RESIDENCE' to 'ZOO' \n\n " },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
+                            { header: "Expected Dataframe", data:[{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]}
+                        ], status: " 🔴"
+                    },
+                    {
                         name: "Filtering Data in Columns", layoutItems: [
-                            { header: "Examples", subHeader: 'Objective: Learn how to filter dataframe by column value', vModel: "## Filter for female pandas only \n>>> original_df[original_df['GENDER']=='F'] \n \n## Filter for pandas living in the USA \n>>> original_df[original_df['RESIDENCE']=='USA'] \n " },
+                            { header: "Examples", subHeader: 'Objective: Learn how to filter dataframe by column value', vModel: "## Filter for female pandas only \n>>> original_df[original_df['GENDER']=='F'] \n \n## Filter for pandas living in the USA \n>>> original_df[original_df['RESIDENCE']=='USA']\n " },
                             { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Filter for pandas with children \n\n" },
                             { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
                                                                     {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
@@ -215,79 +308,9 @@
                         ], status: " 🔴"
                     },
                     {
-                        name: "Selecting Rows", layoutItems: [
-                            { header: "Examples", subHeader: 'Objective: Learn how to select rows in the dataframe', vModel: "## Select the 5th row \n>>> original_df.iloc[4]\nNOTE: Python starts from index 0 \n\n## Select the first 3 rows \n>>>original_df.iloc[0:3]\nNOTE: 0:3 => [0,1,2]"},
-                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Select the 2nd, 5th, and 10th row \n\n" },
-                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
-                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
-                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
-                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
-                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
-                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
-                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
-                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
-                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
-                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
-                            { header: "Expected Dataframe", data:[{id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
-                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
-                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]}
-                        ], status: " 🔴"
-                    },
-                    {
-                        name: "Selecting Specific Cells", layoutItems: [
-                            { header: "Examples", subHeader: 'Objective: Learn how to select specific cells in the dataframe', vModel: "## Select the cell in the 3rd row and 2nd column \n>>> original_df.iloc[2,1]\n" },
-                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def useEnumerate(list):\n locationOfItems = '' \n for index in range(len(list)): \n  value = list[index]\n  locationOfItems += f'{value} is at index {index} '\n return locationOfItems" },
-                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
-                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
-                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
-                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
-                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
-                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
-                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
-                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
-                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
-                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
-                            { header: "Expected Dataframe", data:[]}
-                        ], status: " 🔴"
-                    },
-                    {
-                        name: "question 4", layoutItems: [
-                            { header: "Examples", subHeader: "" },
-                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def useZip(list1, list2):\n resultString = ''\n for index, value in enumerate(list1):\n  resultString += f'{value} is {list2[index]} '\n return resultString" },
-                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
-                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
-                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
-                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
-                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
-                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
-                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
-                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
-                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
-                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
-                            { header: "Expected Dataframe", data:[]}
-                        ], status: " 🔴"
-                    },
-                    {
-                        name: "question 5", layoutItems: [
-                            { header: "Examples", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
-                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
-                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
-                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
-                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
-                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
-                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
-                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
-                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
-                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
-                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
-                            { header: "Expected Dataframe", data:[]}
-                        ], status: " 🔴"
-                    },
-                    {
                         name: "question 6", layoutItems: [
-                            { header: "Examples", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
-                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
+                            { header: "Examples", subHeader: 'Objective: Learn how to rename column names', vModel: ""},
+                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: ""},
                             { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
                                                                     {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
                                                                     {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
@@ -379,7 +402,7 @@
                     const searchText = data.htmlFeedback
                     searchText.search(/b2d8b2/) !== -1 ?
                         searchText.search(/#ff9999/) == -1 ?
-                            this.questions.find(item => item.name === questionName).status = " ✔"
+                            this.questions.find(item => item.name === questionName).status = " ✔️"
                             :
                             this.questions.find(item => item.name === questionName).status = " 🤨"
                         :
@@ -393,10 +416,9 @@
 
 <style lang="scss" scoped>
     .title-name{
-        text-align: left;
-        font-family: 'Helvetica Neue', sans-serif;
+        text-align: center;
         font-size: 30px;
-        height: 20px;
+        height: 30px;
         margin: 15px;
     }
     .md-stepper-header{
