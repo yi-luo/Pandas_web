@@ -308,9 +308,9 @@
                         ], status: " 🔴"
                     },
                     {
-                        name: "question 6", layoutItems: [
-                            { header: "Examples", subHeader: 'Objective: Learn how to rename column names', vModel: ""},
-                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: ""},
+                        name: "Filtering Data based on Multiple Conditions", layoutItems: [
+                            { header: "Examples", subHeader: 'Objective: Learn how to filter data based on multiple conditions at once', vModel: "## Filter for female pandas living in United States \n>>> original_df[(original_df['RESIDENCE']=='USA') \n   AND (original_df[original_df['GENDER']='F'])]\n "},
+                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Filter for pandas that have children OR that live in China \n\n "},
                             { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
                                                                     {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
                                                                     {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
@@ -321,7 +321,12 @@
                                                                     {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
                                                                     {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
                                                                     {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
-                            { header: "Expected Dataframe", data:[]}
+                            { header: "Expected Dataframe", data:[{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]}
                         ], status: " 🔴"
                     },
                     {
