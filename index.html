@@ -42,6 +42,7 @@
                 amount:0,
                 answer: "",
                 layoutItems: this.layoutThings,
+                title: this.questionName,
                 cmOptions: {
                     mode: 'python',
                     lineNumbers: true
@@ -83,104 +84,107 @@
             }
         },
         template:
-            `<div class="md-layout  md-gutter">
-            
-            <div id="cardGroupCreator" class="md-layout-item md-size-50">
-                <md-table v-model="layoutItems[2].data" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
-                  <md-table-toolbar>
-                        <h3>{{layoutItems[2].header}}</h3>
-                  </md-table-toolbar>
-            
-                  <md-table-row slot="md-table-row" slot-scope="{ item }">
-                    <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-                    <md-table-cell md-label="NAME" md-sort-by="name">{{ item.name }}</md-table-cell>
-                    <md-table-cell md-label="GENDER" md-sort-by="gender">{{ item.gender }}</md-table-cell>
-                    <md-table-cell md-label="AGE" md-sort-by="age">{{ item.age }}</md-table-cell>
-                    <md-table-cell md-label="CHILDREN" md-sort-by="children">{{ item.children }}</md-table-cell>
-                    <md-table-cell md-label="RESIDENCE" md-sort-by="residence">{{ item.residence }}</md-table-cell>
-                  </md-table-row>
-                </md-table>
+        `
+        <div>
+        <h2 class="title-name">{{title}}</h2> 
+            <div class="md-layout  md-gutter">
+                <div id="cardGroupCreator" class="md-layout-item md-size-50">
+                    
+                    <md-table v-model="layoutItems[2].data" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+                      <md-table-toolbar>
+                            <h3>{{layoutItems[2].header}}</h3>
+                      </md-table-toolbar>
                 
-                <md-card>
-                </md-card>
+                      <md-table-row slot="md-table-row" slot-scope="{ item }">
+                        <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
+                        <md-table-cell md-label="NAME" md-sort-by="name">{{ item.name }}</md-table-cell>
+                        <md-table-cell md-label="GENDER" md-sort-by="gender">{{ item.gender }}</md-table-cell>
+                        <md-table-cell md-label="AGE" md-sort-by="age">{{ item.age }}</md-table-cell>
+                        <md-table-cell md-label="CHILDREN" md-sort-by="children">{{ item.children }}</md-table-cell>
+                        <md-table-cell md-label="RESIDENCE" md-sort-by="residence">{{ item.residence }}</md-table-cell>
+                      </md-table-row>
+                    </md-table>
+                    
+                    <md-card>
+                    </md-card>
+                    
+                    <md-table v-model="layoutItems[3].data" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+                      <md-table-toolbar>
+                            <h3>{{layoutItems[3].header}}</h3>
+                      </md-table-toolbar>
                 
-                <md-table v-model="layoutItems[3].data" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
-                  <md-table-toolbar>
-                        <h3>{{layoutItems[3].header}}</h3>
-                  </md-table-toolbar>
-            
-                  <md-table-row slot="md-table-row" slot-scope="{ item }">
-                    <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
-                    <md-table-cell md-label="NAME" md-sort-by="name">{{ item.name }}</md-table-cell>
-                    <md-table-cell md-label="GENDER" md-sort-by="gender">{{ item.gender }}</md-table-cell>
-                    <md-table-cell md-label="AGE" md-sort-by="age">{{ item.age }}</md-table-cell>
-                    <md-table-cell md-label="CHILDREN" md-sort-by="children">{{ item.children }}</md-table-cell>
-                    <md-table-cell md-label="RESIDENCE" md-sort-by="residence">{{ item.residence }}</md-table-cell>
-                  </md-table-row>
-                </md-table>
+                      <md-table-row slot="md-table-row" slot-scope="{ item }">
+                        <md-table-cell md-label="ID" md-sort-by="id" md-numeric>{{ item.id }}</md-table-cell>
+                        <md-table-cell md-label="NAME" md-sort-by="name">{{ item.name }}</md-table-cell>
+                        <md-table-cell md-label="GENDER" md-sort-by="gender">{{ item.gender }}</md-table-cell>
+                        <md-table-cell md-label="AGE" md-sort-by="age">{{ item.age }}</md-table-cell>
+                        <md-table-cell md-label="CHILDREN" md-sort-by="children">{{ item.children }}</md-table-cell>
+                        <md-table-cell md-label="RESIDENCE" md-sort-by="residence">{{ item.residence }}</md-table-cell>
+                      </md-table-row>
+                    </md-table>
+                    
+                    
+                </div>
                 
                 
+                <div id="cardGroupPreview" class="md-layout-item md-size-50">
+                    <md-card> <!-- Examples -->
+                        <md-card-header>
+                            <md-card-header-text>
+                                <div class="md-title">{{layoutItems[0].header}}</div>
+                                <div class="md-subhead">{{layoutItems[0].subHeader}}</div>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content>
+                            <md-field>
+                                 <codemirror class="editableTextarea" v-model="layoutItems[0].vModel" :options="cmReadOnly"></codemirror>
+                            </md-field>
+                        </md-card-content>
+                    </md-card>
+                    
+                    <md-card>
+                        <md-card-header>
+                            <md-card-header-text>
+                                <div class="md-title">{{layoutItems[1].header}}</div>
+                                <div class="md-subhead">{{layoutItems[1].subHeader}}</div>
+                            </md-card-header-text>
+                                <md-card-media>
+                                    <md-button class="md-raised md-primary" v-on:click="postContents">Submit</md-button>
+                                </md-card-media>
+                        </md-card-header>
+                        <md-card-content>
+                            <md-field>
+                                <codemirror class="editableTextarea" v-model="layoutItems[1].vModel" :options="cmOptions"></codemirror>
+                            </md-field>
+                        </md-card-content>
+                    </md-card>
+                    
+                    <md-card>
+                        <md-card-header>
+                            <md-card-header-text>
+                                <div class="md-title">Output</div>
+                                <div class="md-subhead">Test results</div>
+                            </md-card-header-text>
+                        </md-card-header>
+                        <md-card-content>
+                            <md-field>
+                                <md-tabs>
+                                    <md-tab id="tab-htmlResults" md-label="HTML results">
+                                        <div v-html="answer.htmlFeedback"></div>
+                                    </md-tab>
+                                    <md-tab id="tab-jsonResults" md-label="JSON results">
+                                        <md-textarea v-model="answer.jsonFeedback" readonly></md-textarea>
+                                    </md-tab>
+                                    <md-tab id="tab-textResults" md-label="Text results">
+                                        <md-textarea v-model="answer.textFeedback" readonly></md-textarea>
+                                    </md-tab>
+                                </md-tabs>
+                            </md-field>
+                        </md-card-content>
+                    </md-card>
+                    
+                </div>
             </div>
-            
-            
-            <div id="cardGroupPreview" class="md-layout-item md-size-50">
-                <md-card> <!-- Examples -->
-                    <md-card-header>
-                        <md-card-header-text>
-                            <div class="md-title">{{layoutItems[0].header}}</div>
-                            <div class="md-subhead">{{layoutItems[0].subHeader}}</div>
-                        </md-card-header-text>
-                    </md-card-header>
-                    <md-card-content>
-                        <md-field>
-                             <codemirror class="editableTextarea" v-model="layoutItems[0].vModel" :options="cmReadOnly"></codemirror>
-                        </md-field>
-                    </md-card-content>
-                </md-card>
-                
-                <md-card>
-                    <md-card-header>
-                        <md-card-header-text>
-                            <div class="md-title">{{layoutItems[1].header}}</div>
-                            <div class="md-subhead">{{layoutItems[1].subHeader}}</div>
-                        </md-card-header-text>
-                            <md-card-media>
-                                <md-button class="md-raised md-primary" v-on:click="postContents">Submit</md-button>
-                            </md-card-media>
-                    </md-card-header>
-                    <md-card-content>
-                        <md-field>
-                            <codemirror class="editableTextarea" v-model="layoutItems[1].vModel" :options="cmOptions"></codemirror>
-                        </md-field>
-                    </md-card-content>
-                </md-card>
-                
-                <md-card>
-                    <md-card-header>
-                        <md-card-header-text>
-                            <div class="md-title">Output</div>
-                            <div class="md-subhead">Test results</div>
-                        </md-card-header-text>
-                    </md-card-header>
-                    <md-card-content>
-                        <md-field>
-                            <md-tabs>
-                                <md-tab id="tab-htmlResults" md-label="HTML results">
-                                    <div v-html="answer.htmlFeedback"></div>
-                                </md-tab>
-                                <md-tab id="tab-jsonResults" md-label="JSON results">
-                                    <md-textarea v-model="answer.jsonFeedback" readonly></md-textarea>
-                                </md-tab>
-                                <md-tab id="tab-textResults" md-label="Text results">
-                                    <md-textarea v-model="answer.textFeedback" readonly></md-textarea>
-                                </md-tab>
-                            </md-tabs>
-                        </md-field>
-                    </md-card-content>
-                </md-card>
-                
-            </div>
-            
         </div>
         `
     })
@@ -191,9 +195,9 @@
                 amount: 100,
                 questions: [
                     {
-                        name: "question 1", layoutItems: [
+                        name: "Filtering Data in Columns", layoutItems: [
                             { header: "Examples", subHeader: 'Objective: Learn how to filter dataframe by column value', vModel: "## Filter for female pandas only \n>>> original_df[original_df['GENDER']=='F'] \n \n## Filter for pandas living in the USA \n>>> original_df[original_df['RESIDENCE']=='USA'] \n " },
-                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "def ifFunc(a,b):\n if a == True:  \n  return b\n" },
+                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Filter for pandas with children \n\n" },
                             { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
                                                                     {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
                                                                     {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
@@ -201,81 +205,167 @@
                                                                     {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
                                                                     {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
                                                                     {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
-                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"}]},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
                                                                     {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
-                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"}]}
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]}
                         ], status: " 🔴"
                     },
                     {
-                        name: "question 2", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> forLoop([1,2,3])\n6 \n>>> forLoop([1,2,3,4,5])\n15 \n>>> byteCodeChecker(forLoop, 'OPNAME', 'FOR_ITER')\n'found FOR_ITER'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def forLoop(listOfNumbers):\n total = 0 \n index = 0 \n while index < len(listOfNumbers):\n  total += listOfNumbers[index]\n  index += 1\n return total" },
-                            { header: "Original Dataframe", data:[]},
-                            { header: "Expected Dataframe", data:[]}
+                        name: "Selecting Rows", layoutItems: [
+                            { header: "Examples", subHeader: 'Objective: Learn how to select rows in the dataframe', vModel: "## Select the 5th row \n>>> original_df.iloc[4]\nNOTE: Python starts from index 0 \n\n## Select the first 3 rows \n>>>original_df.iloc[0:3]\nNOTE: 0:3 => [0,1,2]"},
+                            { header: "Exercise", subHeader: 'Write your code below to modify the Original Dataframe to look like the Expected Output Dataframe.', vModel: "## Select the 2nd, 5th, and 10th row \n\n" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
+                            { header: "Expected Dataframe", data:[{id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]}
                         ], status: " 🔴"
                     },
                     {
-                        name: "question 3", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> useEnumerate(['bunnyA','bunnyB'])\n'bunnyA is at index 0 bunnyB is at index 1 ' \n>>> useEnumerate(['crabbyA','crabbyB'])\n'crabbyA is at index 0 crabbyB is at index 1 ' \n>>> codeInfoChecker(useEnumerate, 'enumerate')\n'found enumerate'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def useEnumerate(list):\n locationOfItems = '' \n for index in range(len(list)): \n  value = list[index]\n  locationOfItems += f'{value} is at index {index} '\n return locationOfItems" },
-                            { header: "Original Dataframe", data:[]},
+                        name: "Selecting Specific Cells", layoutItems: [
+                            { header: "Examples", subHeader: 'Objective: Learn how to select specific cells in the dataframe', vModel: "## Select the cell in the 3rd row and 2nd column \n>>> original_df.iloc[2,1]\n" },
+                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def useEnumerate(list):\n locationOfItems = '' \n for index in range(len(list)): \n  value = list[index]\n  locationOfItems += f'{value} is at index {index} '\n return locationOfItems" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 4", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> useZip(['pikachu','bulbasaur'],['lightning type','grass type'])\n'pikachu is lightning type bulbasaur is grass type ' \n>>> useZip(['Barney','Pooh'],['T-rex','teddy bear'])\n'Barney is T-rex Pooh is teddy bear ' \n>>> codeInfoChecker(useZip, 'zip')\n'found zip'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def useZip(list1, list2):\n resultString = ''\n for index, value in enumerate(list1):\n  resultString += f'{value} is {list2[index]} '\n return resultString" },
-                            { header: "Original Dataframe", data:[]},
+                            { header: "Examples", subHeader: "" },
+                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "def useZip(list1, list2):\n resultString = ''\n for index, value in enumerate(list1):\n  resultString += f'{value} is {list2[index]} '\n return resultString" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 5", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Original Dataframe", data:[]},
+                            { header: "Examples", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
+                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 6", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Original Dataframe", data:[]},
+                            { header: "Examples", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
+                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 7", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Original Dataframe", data:[]},
+                            { header: "Examples", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
+                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 8", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Original Dataframe", data:[]},
+                            { header: "Examples", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
+                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 9", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Original Dataframe", data:[]},
+                            { header: "Examples", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
+                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
                     {
                         name: "question 10", layoutItems: [
-                            { header: "Tests", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
-                            { header: "Editable Code Block", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
-                            { header: "Original Dataframe", data:[]},
+                            { header: "Examples", subHeader: 'byteCodeChecker() and codeInfoChecker() are our functions used in these tests', vModel: ">>> eat()\n'I ate burger I ate fries '\n>>> codeInfoChecker(foodGenerator, 'GENERATOR')\n'found GENERATOR'" },
+                            { header: "Exercise", subHeader: 'Your code goes below. Avoid double quotes.', vModel: "# generator function which yields data values\ndef foodGenerator():\n yield 'ice cream'\n\n# eat() function calls foodGenerator() and iterates over the yielded values\ndef eat():\n foodEaten = ''\n for food in foodGenerator():\n  foodEaten += f'I ate {food} '\n return foodEaten" },
+                            { header: "Original Dataframe", data: [{id: "1",name: "Mei Xiang",gender: "F",age:"20",children:"Yes",residence:"USA"},
+                                                                    {id: "2",name: "Bei Bei",gender: "M",age:"4",children: "No",residence:"USA"},
+                                                                    {id: "3",name: "Bai Yun",gender: "F",age:"28",children: "Yes",residence:"China"},
+                                                                    {id: "4",name: "Bao Bao",gender: "F",age:"6",children: "No",residence:"China"},
+                                                                    {id: "5",name: "Da Mao",gender: "M",age:"11",children: "No",residence:"Canada"},
+                                                                    {id: "6",name: "Lin Hui",gender: "F",age:"18",children: "Yes",residence:"Thailand"},
+                                                                    {id: "7",name: "Tian Tian",gender: "F",age:"16",children: "No",residence:"UK"},
+                                                                    {id: "8",name: "Yuan Zai",gender: "F",age:"6",children: "No",residence:"Taiwan"},
+                                                                    {id: "9",name: "Gu Gu",gender: "M",age:"20",children: "No",residence:"China"},
+                                                                    {id: "10",name: "Lun Lun",gender: "F",age:"22",children: "Yes",residence:"USA"}]},
                             { header: "Expected Dataframe", data:[]}
                         ], status: " 🔴"
                     },
@@ -289,7 +379,7 @@
                     const searchText = data.htmlFeedback
                     searchText.search(/b2d8b2/) !== -1 ?
                         searchText.search(/#ff9999/) == -1 ?
-                            this.questions.find(item => item.name === questionName).status = " ✔️"
+                            this.questions.find(item => item.name === questionName).status = " ✔"
                             :
                             this.questions.find(item => item.name === questionName).status = " 🤨"
                         :
@@ -302,6 +392,17 @@
 </script>
 
 <style lang="scss" scoped>
+    .title-name{
+        text-align: left;
+        font-family: 'Helvetica Neue', sans-serif;
+        font-size: 30px;
+        height: 20px;
+        margin: 15px;
+    }
+    .md-stepper-header{
+        height: 24px
+        
+    }
     .md-card {
         width: 95%;
         margin: 0px;
